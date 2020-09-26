@@ -2,6 +2,13 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack'; 
+import { Provider } from "react-redux";
+
+// import store config 
+import configureStore from './store'; 
+
+const store = configureStore(); 
+
 
 // Screen Imports will come here 
 import Home from './screens/Home';
@@ -16,6 +23,7 @@ const Stack = createStackNavigator();
 
  export default function App() {
     return (
+      <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name ="Home" component ={Home} />
@@ -24,5 +32,6 @@ const Stack = createStackNavigator();
           <Stack.Screen name ="Dashboard" component ={Dashboard} />
         </Stack.Navigator>
       </NavigationContainer>
+      </Provider>
     )
 }
