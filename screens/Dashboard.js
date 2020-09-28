@@ -1,9 +1,10 @@
 import React, {Component} from 'react'; 
 import {View, Text, StyleSheet} from 'react-native'; 
+import { connect } from 'react-redux';
 
 
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
     render(){
         return (
             <View style = {styles.container}>
@@ -21,3 +22,12 @@ const styles = StyleSheet.create({
     }
 }); 
 
+const mapStateToProps = state => {
+    console.log(state); 
+    return {
+        user: state.user.user
+    }
+}
+
+
+export default connect(mapStateToProps, null)(Dashboard)

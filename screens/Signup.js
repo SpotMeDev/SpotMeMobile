@@ -1,6 +1,7 @@
 import React, {Component} from 'react'; 
 import {View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'; 
 import { connect } from "react-redux";
+import { signup } from "../actions/actions";
 
 
 class Signup extends Component {
@@ -29,7 +30,11 @@ class Signup extends Component {
     }
 
     signupUser = () => {
-      
+        this.props.signup(this.state.name, this.state.email, this.state.password, this.state.confirmPassword).then(() => {
+            this.props.navigation.navigate("Dashboard");   
+        }).catch(error => {
+            console.log("Error signing up", error); 
+        })
     }
 
     render(){

@@ -13,7 +13,7 @@
       case LOGIN:
         return {loggedIn: true, user: action.data}
       case LOGOUT:
-        return action.data;
+        return {loggedIn: false, user: {}}
       default:
         return state;
     }

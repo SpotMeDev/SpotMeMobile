@@ -1,10 +1,11 @@
 import React, {Component} from 'react'; 
 import {View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'; 
-import axios from 'axios'; 
+import { connect } from 'react-redux';
+import { login } from "../actions/actions";
 
 
 
-export default class Login extends Component {
+class Login extends Component {
     state = {
         email: '', 
         password: ''
@@ -22,15 +23,11 @@ export default class Login extends Component {
     }
 
     login = () => {
-        if (this.state.email != "" &&  this.state.password != "") {
-            axios.post("http://localhost:8080/auth/login", {email: this.state.email, password: this.state.password}).then(resp => {
-                // deal with JWT token 
-                console.log(resp)
-                this.props.navigation.navigate('Dashboard'); 
-            }).catch(err => {
-                console.log("error", err); 
-            })
-        }
+        this.props.login(this.state.email, this.state.password).then(() => {
+            this.props.navigation.navigate("Dashboard"); 
+        }).catch(err => {
+            console.log(err);   
+        })
     }
 
     render(){
@@ -55,4 +52,17 @@ const styles = StyleSheet.create({
     }
 }); 
 
+const mapStateToProps = state => {
+    return {
+        user: state.user.user
+    }
+}
 
+const mapDispatchToProps = dispatch => {
+    return {
+        login: (email, password) => dispatch(login(email, password))
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login); 
