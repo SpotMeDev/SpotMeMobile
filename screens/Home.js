@@ -4,12 +4,6 @@ import { connect } from 'react-redux';
 import SInfo from 'react-native-sensitive-info';
 
 class Home extends Component {
-    componentDidMount = async () => {
-        console.log(await SInfo.getItem('token', {
-            sharedPreferencesName: 'mySharedPrefs',
-            keychainService: 'myKeychain'
-        }));
-    }
     render(){
         return (
             <View style={styles.container}>

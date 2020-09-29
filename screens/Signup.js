@@ -31,7 +31,7 @@ class Signup extends Component {
 
     signupUser = () => {
         this.props.signup(this.state.name, this.state.email, this.state.password, this.state.confirmPassword).then(() => {
-            this.props.navigation.navigate("Dashboard");   
+            // this.props.navigation.navigate("Dashboard");   
         }).catch(error => {
             console.log("Error signing up", error); 
         })
