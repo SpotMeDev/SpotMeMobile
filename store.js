@@ -1,4 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
+import { persistStore, persistReducer } from 'redux-persist'
+import AsyncStorage from '@react-native-community/async-storage';
 import userReducer from "./reducers/userReducer";
 import thunk from "redux-thunk";
 
@@ -6,6 +8,11 @@ import thunk from "redux-thunk";
 const appReducer = combineReducers({
   user: userReducer,
 });
+
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage
+}
 
 const rootReducer = (state, action) => {
 //   if (action.type == "LOGOUT") {
@@ -15,6 +22,11 @@ const rootReducer = (state, action) => {
   return appReducer(state, action);
 };
 
-const configureStore = () => createStore(rootReducer, applyMiddleware(thunk));
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-export default configureStore;
+
+const configureStore = () => createStore(persistedReducer, applyMiddleware(thunk));
+let store = configureStore()
+let persistor = persistStore(store)
+
+export { store, persistor }
