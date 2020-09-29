@@ -1,13 +1,16 @@
 import React, {Component} from 'react'; 
-import {View, Text, StyleSheet} from 'react-native'; 
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'; 
+import { connect } from 'react-redux';
+import { logout } from "../actions/actions";
 
-
-
-export default class Dashboard extends Component {
+class Dashboard extends Component {
     render(){
         return (
             <View style = {styles.container}>
                 <Text>Welcome to the SpotMe Dashboard!</Text>
+                <TouchableOpacity onPress = {() => this.props.logout()}>
+                    <Text>Logout</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -21,3 +24,18 @@ const styles = StyleSheet.create({
     }
 }); 
 
+const mapStateToProps = state => {
+    console.log(state); 
+    return {
+        user: state.user.user
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        logout: () => dispatch(logout())
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

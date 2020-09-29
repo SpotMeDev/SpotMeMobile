@@ -1,13 +1,44 @@
 import React, {Component} from 'react'; 
-import {View, Text, StyleSheet} from 'react-native'; 
+import {View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'; 
+import { connect } from 'react-redux';
+import { login } from "../actions/actions";
 
 
 
-export default class Login extends Component {
+class Login extends Component {
+    state = {
+        email: '', 
+        password: ''
+    }
+
+    handleLoginForm = (type, newValue) => {
+        switch (type) {
+            case 'email': 
+                this.setState({email: newValue})
+                break; 
+            case 'password': 
+                this.setState({password: newValue})
+                break; 
+        }
+    }
+
+    login = () => {
+        this.props.login(this.state.email, this.state.password).then(() => {
+            this.props.navigation.navigate("Dashboard"); 
+        }).catch(err => {
+            console.log(err);   
+        })
+    }
+
     render(){
         return (
             <View style = {styles.container}>
                 <Text>Welcome to the Login Screen!</Text>
+                <TextInput placeholder = {"email"} value = {this.state.email}  onChangeText = {text => this.handleLoginForm('email', text)} /> 
+                <TextInput placeholder = {"password"} value = {this.state.password}  onChangeText = {text => this.handleLoginForm('password', text)} secureTextEntry={true}/> 
+                <TouchableOpacity onPress = {this.login}>
+                    <Text>Login</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -21,4 +52,17 @@ const styles = StyleSheet.create({
     }
 }); 
 
+const mapStateToProps = state => {
+    return {
+        user: state.user.user
+    }
+}
 
+const mapDispatchToProps = dispatch => {
+    return {
+        login: (email, password) => dispatch(login(email, password))
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login); 
