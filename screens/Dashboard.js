@@ -11,6 +11,9 @@ class Dashboard extends Component {
                 <TouchableOpacity onPress = {() => this.props.logout()}>
                     <Text>Logout</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress = {() => this.props.navigation.navigate("Search")}>
+                    <Text>Search for Friends</Text>
+                </TouchableOpacity>
             </View>
         )
     }

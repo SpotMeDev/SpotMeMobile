@@ -8,7 +8,7 @@ import Home from './screens/Home';
 import Signup from './screens/Signup';
 import Login from './screens/Login';
 import Dashboard from './screens/Dashboard';
-import SInfo from 'react-native-sensitive-info';
+import Search from './screens/Search'
 
 
 // initializes Stack Navigator to allow us to move between different screens
@@ -17,7 +17,6 @@ const Stack = createStackNavigator();
 
 class App extends Component {
   render() {
-    console.log(this.props)
     return(
       <NavigationContainer>
         <Stack.Navigator>
@@ -29,7 +28,11 @@ class App extends Component {
             <Stack.Screen name ="Login" component ={Login} /> 
           </>
           ) : ( 
-          <Stack.Screen name ="Dashboard" component ={Dashboard} />)}
+            <>
+            <Stack.Screen name ="Dashboard" component ={Dashboard} />
+            <Stack.Screen name = "Search" component = {Search} />
+          </>
+          )}
         </Stack.Navigator>
         {/* <Stack.Navigator>       
           <Stack.Screen name ="Home" component ={Home} />

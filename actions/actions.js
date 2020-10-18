@@ -61,3 +61,30 @@ export const logout = () => async dispatch => {
 }
 
 
+export const search = (query) => dispatch => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log('query', query)
+            const jwt = await SInfo.getItem('token', {
+                sharedPreferencesName: 'mySharedPrefs',
+                keychainService: 'myKeychain'
+            })
+            axios.get(`http://localhost:8080/auth/search-query?query=${query}`, 
+            {
+                headers: {"Authorization": jwt
+            
+            }}).then(res => {
+                // return users after search query 
+                console.log(res.data.users)
+                resolve(res.data.users); 
+            }).catch(err => {
+                console.log('error here', err)
+                reject(err)
+            })
+        }
+        catch(err) {
+            reject(err)
+        }
+    })
+}
+
