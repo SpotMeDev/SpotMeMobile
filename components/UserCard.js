@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 
 
 class UserCard extends React.Component {
@@ -10,10 +10,12 @@ class UserCard extends React.Component {
 
     render(){
         return(
-            <View style = {styles.container}>
-                <Text>{this.props.username}</Text>
-                <Text>{this.props.name}</Text>
-            </View>
+            <TouchableOpacity onPress = {() => {this.props.navigation.navigate("Profile", {name: this.props.name, username: this.props.username})}}>
+                <View style = {styles.container}>
+                    <Text>{this.props.username}</Text>
+                    <Text>{this.props.name}</Text>
+                </View>
+            </TouchableOpacity>
         )
     }
 
