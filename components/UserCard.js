@@ -9,11 +9,12 @@ class UserCard extends React.Component {
     }
 
     render(){
+        const { navigate, name, username } = this.props; 
         return(
-            <TouchableOpacity onPress = {() => {this.props.navigation.navigate("Profile", {name: this.props.name, username: this.props.username})}}>
+            <TouchableOpacity onPress = {() => {navigate.navigate("Profile", {name: name, username: username})}}>
                 <View style = {styles.container}>
-                    <Text>{this.props.username}</Text>
-                    <Text>{this.props.name}</Text>
+                    <Text>{username}</Text>
+                    <Text>{name}</Text>
                 </View>
             </TouchableOpacity>
         )
