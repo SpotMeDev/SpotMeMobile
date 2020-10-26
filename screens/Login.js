@@ -34,7 +34,7 @@ class Login extends Component {
         return (
             <View style = {styles.container}>
                 <Text>Welcome to the Login Screen!</Text>
-                <TextInput placeholder = {"email"} value = {this.state.email}  onChangeText = {text => this.handleLoginForm('email', text)} /> 
+                <TextInput autoCapitalize="none" placeholder = {"email"} value = {this.state.email}  onChangeText = {text => this.handleLoginForm('email', text)} /> 
                 <TextInput placeholder = {"password"} value = {this.state.password}  onChangeText = {text => this.handleLoginForm('password', text)} secureTextEntry={true}/> 
                 <TouchableOpacity onPress = {this.login}>
                     <Text>Login</Text>

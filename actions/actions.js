@@ -88,3 +88,68 @@ export const search = (query) => dispatch => {
     })
 }
 
+
+
+export const isFriend = (id) => dispatch => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const jwt = await SInfo.getItem('token', {
+                sharedPreferencesName: 'mySharedPrefs',
+                keychainService: 'myKeychain'
+            });
+
+            axios.get(`http://localhost:8080/auth/is-friend?rID=${id}`, 
+            {
+                headers: {"Authorization": jwt
+            
+            }}).then(res => {
+                // return the status of their friendship
+                console.log(res.data.status)
+                resolve(res.data.status); 
+            }).catch(err => {
+                console.log('error here', err)
+                reject(err)
+            })
+
+
+        }
+        catch(err) {
+            console.log(err); 
+            reject(err); 
+        }
+    })
+}
+
+
+
+export const handleFriendRequest = (status, recipientID) => dispatch => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const jwt = await SInfo.getItem('token', {
+                sharedPreferencesName: 'mySharedPrefs',
+                keychainService: 'myKeychain'
+            });
+
+            // based on the status determine the nature of the request 
+            if (status == 0) {
+                axios.post(`http://localhost:8080/auth/add-friend`, {recipientID: recipientID},  
+                {   
+                    headers: {"Authorization": jwt
+                
+                }}).then(res => {
+                    // returns updated user 
+                    console.log(res.data.user)
+                    resolve(res.data.user); 
+                }).catch(err => {
+                    console.log('error here', err)
+                    reject(err)
+                })
+            }
+
+        } catch(err) {
+            console.log(err)
+            reject(err); 
+        } 
+    })
+}
+
