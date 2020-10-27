@@ -122,7 +122,7 @@ export const isFriend = (id) => dispatch => {
 
 
 
-export const handleFriendRequest = (status, recipientID) => dispatch => {
+export const handleFriendRequest = (status, recipientID, handlePending) => dispatch => {
     return new Promise(async (resolve, reject) => {
         try {
             const jwt = await SInfo.getItem('token', {
@@ -143,6 +143,39 @@ export const handleFriendRequest = (status, recipientID) => dispatch => {
                 }).catch(err => {
                     console.log('error here', err)
                     reject(err)
+                })
+            }
+            else if (status == 1) {
+                // means we have currently sent a friend request to the other user but we want to remove it 
+                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: "false"}, {headers: {"Authorization": jwt}}).then(user => {
+                    console.log('updated user', user)
+                    console.log("Succesfully removed friend request"); 
+                    resolve(user); 
+                }).catch(err => {
+                    console.log(err); 
+                    reject(err); 
+                })
+            }
+            else if (status == 2) {
+                // pending request from user, we must accept or decline
+                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: handlePending.toString()}, {headers: {"Authorization": jwt}}).then(user => {
+                    console.log('updated user', user)
+                    console.log("Succesfully removed friend request"); 
+                    resolve(user); 
+                }).catch(err => {
+                    console.log(err); 
+                    reject(err); 
+                })
+            }
+            else { 
+                // currently friends but no longer want to be 
+                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: handlePending.toString()}, {headers: {"Authorization": jwt}}).then(user => {
+                    console.log('updated user', user)
+                    console.log("Succesfully removed friend"); 
+                    resolve(user); 
+                }).catch(err => {
+                    console.log(err); 
+                    reject(err); 
                 })
             }
 

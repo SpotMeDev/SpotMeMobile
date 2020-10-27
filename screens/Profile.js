@@ -20,6 +20,10 @@ class Profile extends React.Component {
     }
 
     componentDidMount() {
+        this.initFriend()
+    }
+
+    initFriend = () => {
         // check if the current user is friends with this person, if not show an add friend button 
         this.props.isFriend(this.recipientId).then(status => {
             this.handleFriendText(status)
@@ -29,6 +33,7 @@ class Profile extends React.Component {
             // need a global error handler
         })
     }
+ 
 
     handleFriendText = (status) => {
         // based on the status of their friendship determine what text should appear 
@@ -53,15 +58,18 @@ class Profile extends React.Component {
         this.setState({friendText: buttonText}); 
     }
 
-    handleFriendRequest = () => {
+    handleFriendRequest = (handlePending) => {
         // based on the status determine how to handle the friend request 
-        this.props.friendReq(this.state.status, this.recipientId).then(res => {
-            console.log("Succesfully handled friend request")
+        this.props.friendReq(this.state.status, this.recipientId, handlePending).then(res => {
+            console.log("Succesfully handled friend request"); 
+            // call the function once again to update the friend status
+            this.initFriend(); 
+
         }).catch(err => {
             console.log(err); 
 
         })
-        
+              
     }
 
     render(){
@@ -69,13 +77,24 @@ class Profile extends React.Component {
             <View>
                 <Text>{this.name}</Text>
                 <Text>{this.username}</Text>
-                <TouchableOpacity style = {styles.button} onPress = {this.handleFriendRequest}>
-                    <Text>{this.state.friendText}</Text>
-                </TouchableOpacity>
-            </View>
+                {this.state.status == 2 ? (
+                    <View>
+                    <TouchableOpacity style = {styles.button} onPress = {() => this.handleFriendRequest(true)}>
+                        <Text>Accept</Text>
+                    </TouchableOpacity>                    
+                    <TouchableOpacity style = {styles.button} onPress = {() => this.handleFriendRequest(false)}>
+                        <Text>Decline</Text>
+                    </TouchableOpacity>
+                </View>
+                ): ( 
+                <TouchableOpacity style = {styles.button} onPress = {() => this.handleFriendRequest(false)}>
+                        <Text>{this.state.friendText}</Text>
+                </TouchableOpacity> 
         )
     }
+    </View>
 
+)}
 }
 
 
@@ -95,7 +114,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         isFriend: (recipientID) => dispatch(isFriend(recipientID)), 
-        friendReq: (status, recipientID) => dispatch(handleFriendRequest(status, recipientID))
+        friendReq: (status, recipientID, handlePending) => dispatch(handleFriendRequest(status, recipientID, handlePending))
     }
 }
 
