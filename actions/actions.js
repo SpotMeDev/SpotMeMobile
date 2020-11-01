@@ -64,7 +64,6 @@ export const logout = () => async dispatch => {
 export const search = (query) => dispatch => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log('query', query)
             const jwt = await SInfo.getItem('token', {
                 sharedPreferencesName: 'mySharedPrefs',
                 keychainService: 'myKeychain'

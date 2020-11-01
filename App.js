@@ -7,10 +7,8 @@ import {connect} from 'react-redux'
 import Home from './screens/Home';
 import Signup from './screens/Signup';
 import Login from './screens/Login';
-import Dashboard from './screens/Dashboard';
-import Search from './screens/Search'
 import Profile from './screens/Profile'
-import UserProfile from './screens/UserProfile'
+import SignedInNav from './screens/SignedInNav'; 
 
 // initializes Stack Navigator to allow us to move between different screens
 const Stack = createStackNavigator(); 
@@ -30,19 +28,11 @@ class App extends Component {
           </>
           ) : ( 
             <>
-            <Stack.Screen name = "Dashboard" component ={Dashboard} />
-            <Stack.Screen name = "Search" component = {Search} />
+            <Stack.Screen name = "SignedInNav" component = {SignedInNav} />
             <Stack.Screen name = "Profile" component = {Profile} />
-            <Stack.Screen name = "UserProfile" component = {UserProfile} /> 
           </>
           )}
         </Stack.Navigator>
-        {/* <Stack.Navigator>       
-          <Stack.Screen name ="Home" component ={Home} />
-          <Stack.Screen name ="Signup" component ={Signup} />
-          <Stack.Screen name ="Login" component ={Login} /> 
-          <Stack.Screen name ="Dashboard" component ={Dashboard} />
-        </Stack.Navigator> */}
 
       </NavigationContainer>
     )
