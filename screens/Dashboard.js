@@ -14,6 +14,9 @@ class Dashboard extends Component {
                 <TouchableOpacity onPress = {() => this.props.navigation.navigate("Search")}>
                     <Text>Search for Friends</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress = {() => this.props.navigation.navigate("UserProfile")}>
+                    <Text>Go to Profile</Text>
+                </TouchableOpacity>
             </View>
         )
     }

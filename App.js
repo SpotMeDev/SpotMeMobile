@@ -10,6 +10,7 @@ import Login from './screens/Login';
 import Dashboard from './screens/Dashboard';
 import Search from './screens/Search'
 import Profile from './screens/Profile'
+import UserProfile from './screens/UserProfile'
 
 // initializes Stack Navigator to allow us to move between different screens
 const Stack = createStackNavigator(); 
@@ -32,6 +33,7 @@ class App extends Component {
             <Stack.Screen name = "Dashboard" component ={Dashboard} />
             <Stack.Screen name = "Search" component = {Search} />
             <Stack.Screen name = "Profile" component = {Profile} />
+            <Stack.Screen name = "UserProfile" component = {UserProfile} /> 
           </>
           )}
         </Stack.Navigator>

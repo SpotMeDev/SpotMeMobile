@@ -1,4 +1,4 @@
-import {SIGNUP, LOGIN, LOGOUT } from './types.js' 
+import {SIGNUP, LOGIN, LOGOUT, UPDATE } from './types.js' 
 import axios from 'axios'; 
 import SInfo from 'react-native-sensitive-info';
 
@@ -139,6 +139,7 @@ export const handleFriendRequest = (status, recipientID, handlePending) => dispa
                 }}).then(res => {
                     // returns updated user 
                     console.log(res.data.user)
+                    dispatch({type: UPDATE, data: res.data.user});
                     resolve(res.data.user); 
                 }).catch(err => {
                     console.log('error here', err)
@@ -147,10 +148,11 @@ export const handleFriendRequest = (status, recipientID, handlePending) => dispa
             }
             else if (status == 1) {
                 // means we have currently sent a friend request to the other user but we want to remove it 
-                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: "false"}, {headers: {"Authorization": jwt}}).then(user => {
-                    console.log('updated user', user)
+                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: "false"}, {headers: {"Authorization": jwt}}).then(res => {
+                    console.log('updated user', res.data.user)
                     console.log("Succesfully removed friend request"); 
-                    resolve(user); 
+                    dispatch({type: UPDATE, data: res.data.user});
+                    resolve(res.data.user); 
                 }).catch(err => {
                     console.log(err); 
                     reject(err); 
@@ -158,10 +160,11 @@ export const handleFriendRequest = (status, recipientID, handlePending) => dispa
             }
             else if (status == 2) {
                 // pending request from user, we must accept or decline
-                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: handlePending.toString()}, {headers: {"Authorization": jwt}}).then(user => {
-                    console.log('updated user', user)
+                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: handlePending.toString()}, {headers: {"Authorization": jwt}}).then(res => {
+                    console.log('updated user', res.data.user)
                     console.log("Succesfully removed friend request"); 
-                    resolve(user); 
+                    dispatch({type: UPDATE, data: res.data.user});
+                    resolve(res.data.user); 
                 }).catch(err => {
                     console.log(err); 
                     reject(err); 
@@ -169,10 +172,11 @@ export const handleFriendRequest = (status, recipientID, handlePending) => dispa
             }
             else { 
                 // currently friends but no longer want to be 
-                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: handlePending.toString()}, {headers: {"Authorization": jwt}}).then(user => {
-                    console.log('updated user', user)
+                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: handlePending.toString()}, {headers: {"Authorization": jwt}}).then(res => {
+                    console.log('updated user', res.data.user)
                     console.log("Succesfully removed friend"); 
-                    resolve(user); 
+                    dispatch({type: UPDATE, data: res.data.user});
+                    resolve(res.data.user); 
                 }).catch(err => {
                     console.log(err); 
                     reject(err); 
@@ -186,3 +190,27 @@ export const handleFriendRequest = (status, recipientID, handlePending) => dispa
     })
 }
 
+
+export const updateAccount = (type, updatedField) => dispatch => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const jwt = await SInfo.getItem('token', {
+                sharedPreferencesName: 'mySharedPrefs',
+                keychainService: 'myKeychain'
+            });
+            axios.post("http://localhost:8080/auth/change-account", {updateType: type, updatedField: updatedField}, {headers: {"Authorization": jwt}}).then(response => {
+                console.log(response.data.user)
+                dispatch({type: UPDATE, data: response.data.user});
+                resolve(); 
+            }).catch(err => {
+                console.log(err); 
+                reject(err)
+            })
+
+        } 
+        catch(err) {
+            console.log(err); 
+            reject(err); 
+        }
+    })
+}

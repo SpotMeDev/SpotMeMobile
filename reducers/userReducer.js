@@ -2,6 +2,7 @@
     SIGNUP,
     LOGIN,
     LOGOUT,
+    UPDATE
   } from "../actions/types";
   
   const initialState = {loggedIn: false, user: {}};
@@ -14,6 +15,8 @@
         return {loggedIn: true, user: action.data}
       case LOGOUT:
         return {loggedIn: false, user: {}}
+      case UPDATE: 
+        return {loggedIn: true, user: action.data}
       default:
         return state;
     }
