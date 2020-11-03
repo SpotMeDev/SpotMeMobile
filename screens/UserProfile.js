@@ -2,6 +2,7 @@ import React from 'react'
 import {View, Text, StyleSheet, Modal, TextInput, TouchableOpacity} from 'react-native'
 import {connect} from 'react-redux'
 import {updateAccount} from '../actions/actions'
+import { logout } from "../actions/actions";
 
 class UserProfile extends React.Component {
     constructor(props) {
@@ -51,6 +52,9 @@ class UserProfile extends React.Component {
                     </TouchableOpacity>
                     <TouchableOpacity onPress = {() => this.setState({usernameChangeModal: true})} >
                         <Text>Edit Username</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress = {() => this.props.logout()}>
+                        <Text>Logout</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -102,7 +106,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateAccount: (type, update) => dispatch(updateAccount(type, update))
+        updateAccount: (type, update) => dispatch(updateAccount(type, update)), 
+        logout: () => dispatch(logout())
     }
 }
 
