@@ -1,7 +1,7 @@
 import {SIGNUP, LOGIN, LOGOUT, UPDATE } from './types.js' 
 import axios from 'axios'; 
 import SInfo from 'react-native-sensitive-info';
-
+import {SERVER} from '../utils/consts'; 
 
 // add the necessary actions here 
 export const signup = (name, email, password, confirmPassword) => (dispatch) => {
@@ -12,9 +12,8 @@ export const signup = (name, email, password, confirmPassword) => (dispatch) => 
         if (name === "" || email === "" || password === "" || confirmPassword === "") {
             reject("None of the fields should be empty!"); 
         }
-        axios.post("http://localhost:8080/auth/signup", {name: name, email: email, password: password, confirmPassword: confirmPassword}).then(async response => {
+        axios.post(SERVER + "/auth/signup", {name: name, email: email, password: password, confirmPassword: confirmPassword}).then(async response => {
             // deal with JWT token 
-            console.log(response);
             const saveUserToken = await SInfo.setItem('token', response.data.token, {
                 sharedPreferencesName: 'mySharedPrefs',
                 keychainService: 'myKeychain'
@@ -35,8 +34,7 @@ export const login = (email, password) => (dispatch) => {
             reject("Must fill out email and password fields"); 
         }
         else { 
-           axios.post("http://localhost:8080/auth/login", {email: email, password: password}).then(async response => {
-            console.log(response);
+           axios.post(SERVER + "/auth/login", {email: email, password: password}).then(async response => {
             const saveUserToken = await SInfo.setItem('token', response.data.token, {
                 sharedPreferencesName: 'mySharedPrefs',
                 keychainService: 'myKeychain'
@@ -68,7 +66,7 @@ export const search = (query) => dispatch => {
                 sharedPreferencesName: 'mySharedPrefs',
                 keychainService: 'myKeychain'
             })
-            axios.get(`http://localhost:8080/auth/search-query?query=${query}`, 
+            axios.get(SERVER + `/auth/search-query?query=${query}`, 
             {
                 headers: {"Authorization": jwt
             
@@ -97,7 +95,7 @@ export const isFriend = (id) => dispatch => {
                 keychainService: 'myKeychain'
             });
 
-            axios.get(`http://localhost:8080/auth/is-friend?rID=${id}`, 
+            axios.get(SERVER + `/auth/is-friend?rID=${id}`, 
             {
                 headers: {"Authorization": jwt
             
@@ -131,7 +129,7 @@ export const handleFriendRequest = (status, recipientID, handlePending) => dispa
 
             // based on the status determine the nature of the request 
             if (status == 0) {
-                axios.post(`http://localhost:8080/auth/add-friend`, {recipientID: recipientID},  
+                axios.post(SERVER + `/auth/add-friend`, {recipientID: recipientID},  
                 {   
                     headers: {"Authorization": jwt
                 
@@ -147,7 +145,7 @@ export const handleFriendRequest = (status, recipientID, handlePending) => dispa
             }
             else if (status == 1) {
                 // means we have currently sent a friend request to the other user but we want to remove it 
-                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: "false"}, {headers: {"Authorization": jwt}}).then(res => {
+                axios.post(SERVER + `/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: "false"}, {headers: {"Authorization": jwt}}).then(res => {
                     console.log('updated user', res.data.user)
                     console.log("Succesfully removed friend request"); 
                     dispatch({type: UPDATE, data: res.data.user});
@@ -159,7 +157,7 @@ export const handleFriendRequest = (status, recipientID, handlePending) => dispa
             }
             else if (status == 2) {
                 // pending request from user, we must accept or decline
-                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: handlePending.toString()}, {headers: {"Authorization": jwt}}).then(res => {
+                axios.post(SERVER + `/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: handlePending.toString()}, {headers: {"Authorization": jwt}}).then(res => {
                     console.log('updated user', res.data.user)
                     console.log("Succesfully removed friend request"); 
                     dispatch({type: UPDATE, data: res.data.user});
@@ -171,7 +169,7 @@ export const handleFriendRequest = (status, recipientID, handlePending) => dispa
             }
             else { 
                 // currently friends but no longer want to be 
-                axios.post(`http://localhost:8080/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: handlePending.toString()}, {headers: {"Authorization": jwt}}).then(res => {
+                axios.post(SERVER + `/auth/handle-friend-request`, {recipientID: recipientID, acceptedRequest: handlePending.toString()}, {headers: {"Authorization": jwt}}).then(res => {
                     console.log('updated user', res.data.user)
                     console.log("Succesfully removed friend"); 
                     dispatch({type: UPDATE, data: res.data.user});
@@ -197,7 +195,7 @@ export const updateAccount = (type, updatedField) => dispatch => {
                 sharedPreferencesName: 'mySharedPrefs',
                 keychainService: 'myKeychain'
             });
-            axios.post("http://localhost:8080/auth/change-account", {updateType: type, updatedField: updatedField}, {headers: {"Authorization": jwt}}).then(response => {
+            axios.post(SERVER + "/auth/change-account", {updateType: type, updatedField: updatedField}, {headers: {"Authorization": jwt}}).then(response => {
                 console.log(response.data.user)
                 dispatch({type: UPDATE, data: response.data.user});
                 resolve(); 
@@ -232,7 +230,7 @@ export const changePassword = (currentPasword, newPassword, confirmPassword) => 
             keychainService: 'myKeychain'
         });
 
-        axios.post("http://localhost:8080/auth/change-password", {currentPasword, newPassword, confirmPassword}, {headers: {"Authorization": jwt}}).then(res => {
+        axios.post(SERVER + "/auth/change-password", {currentPasword, newPassword, confirmPassword}, {headers: {"Authorization": jwt}}).then(res => {
             console.log("Succesfully changed password"); 
             resolve(); 
         }).catch(err => {
