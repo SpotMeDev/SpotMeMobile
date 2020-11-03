@@ -213,3 +213,32 @@ export const updateAccount = (type, updatedField) => dispatch => {
         }
     })
 }
+
+
+export const changePassword = (currentPasword, newPassword, confirmPassword) => dispatch => {
+    return new Promise(async (resolve, reject) => {
+        if (currentPasword == "" || newPassword == "" || confirmPassword == "") {
+            reject("Passwords can't be empty!"); 
+        }
+        if (newPassword != confirmPassword) {
+            reject("New Password and Confirm Password must match!"); 
+        }
+        if (currentPasword == newPassword) {
+            reject("New Password must be different from the current password!"); 
+        }
+
+        const jwt = await SInfo.getItem('token', {
+            sharedPreferencesName: 'mySharedPrefs',
+            keychainService: 'myKeychain'
+        });
+
+        axios.post("http://localhost:8080/auth/change-password", {currentPasword, newPassword, confirmPassword}, {headers: {"Authorization": jwt}}).then(res => {
+            console.log("Succesfully changed password"); 
+            resolve(); 
+        }).catch(err => {
+            console.log(err); 
+            reject(err); 
+        })
+        
+    })
+}

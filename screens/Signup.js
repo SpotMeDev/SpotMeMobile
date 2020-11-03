@@ -41,10 +41,10 @@ class Signup extends Component {
         return (
             <View style = {styles.container}>
                 <Text>Welcome to the Signup Screen!</Text>
-                <TextInput placeholder = {"Name"} value = {this.state.name} onChangeText={text => this.handleFormChange('name', text)} />
-                <TextInput placeholder = {"Email"} value = {this.state.email} onChangeText={text => this.handleFormChange('email', text)} />
-                <TextInput placeholder = {"Password"} value = {this.state.password} onChangeText={text => this.handleFormChange('password', text)} secureTextEntry={true}/>
-                <TextInput placeholder = {"Confirm Password"} value = {this.state.confirmPassword} onChangeText={text => this.handleFormChange('confirmPassword', text)} secureTextEntry={true} />
+                <TextInput autoCapitalize="none" placeholder = {"Name"} value = {this.state.name} onChangeText={text => this.handleFormChange('name', text)} />
+                <TextInput autoCapitalize="none" placeholder = {"Email"} value = {this.state.email} onChangeText={text => this.handleFormChange('email', text)} />
+                <TextInput autoCapitalize="none" placeholder = {"Password"} value = {this.state.password} onChangeText={text => this.handleFormChange('password', text)} secureTextEntry={true}/>
+                <TextInput autoCapitalize="none" placeholder = {"Confirm Password"} value = {this.state.confirmPassword} onChangeText={text => this.handleFormChange('confirmPassword', text)} secureTextEntry={true} />
                 <TouchableOpacity onPress = {() => this.signupUser()}>
                     <Text>Submit</Text>
                 </TouchableOpacity>
