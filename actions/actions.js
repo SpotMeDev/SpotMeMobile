@@ -4,7 +4,7 @@ import SInfo from 'react-native-sensitive-info';
 import {SERVER} from '../utils/consts'; 
 
 // add the necessary actions here 
-export const signup = (name, email, password, confirmPassword) => (dispatch) => {
+export const signup = (name, username, email, password, confirmPassword) => (dispatch) => {
     return new Promise(async (resolve, reject) => {
         if (password != confirmPassword) {
             reject("Password and Confirm Password must be the same!"); 
@@ -12,7 +12,7 @@ export const signup = (name, email, password, confirmPassword) => (dispatch) => 
         if (name === "" || email === "" || password === "" || confirmPassword === "") {
             reject("None of the fields should be empty!"); 
         }
-        axios.post(SERVER + "/auth/signup", {name: name, email: email, password: password, confirmPassword: confirmPassword}).then(async response => {
+        axios.post(SERVER + "/auth/signup", {name: name, username: username, email: email, password: password, confirmPassword: confirmPassword}).then(async response => {
             try {
                 // deal with JWT token 
                 const saveUserToken = await SInfo.setItem('token', response.data.token, {

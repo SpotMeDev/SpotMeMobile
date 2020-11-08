@@ -8,6 +8,7 @@ import errorHandler from '../utils/errors';
 class Signup extends Component {
     state = {
         name: '', 
+        username: '', 
         email: '', 
         password: '', 
         confirmPassword: ''
@@ -17,6 +18,9 @@ class Signup extends Component {
         switch (type) {
             case "name": 
                 this.setState({name: newValue})
+                break; 
+            case "username": 
+                this.setState({username: newValue})
                 break; 
             case "email": 
                 this.setState({email: newValue})  
@@ -31,7 +35,7 @@ class Signup extends Component {
     }
 
     signupUser = () => {
-        this.props.signup(this.state.name, this.state.email, this.state.password, this.state.confirmPassword).then(() => {
+        this.props.signup(this.state.name, this.state.username, this.state.email, this.state.password, this.state.confirmPassword).then(() => {
             errorHandler("Succesfully signed up", 'green');  
         }).catch(error => {
             console.log("Error signing up", error.response.data.message);
@@ -44,6 +48,7 @@ class Signup extends Component {
             <View style = {styles.container}>
                 <Text>Welcome to the Signup Screen!</Text>
                 <TextInput autoCapitalize="none" placeholder = {"Name"} value = {this.state.name} onChangeText={text => this.handleFormChange('name', text)} />
+                <TextInput autoCapitalize="none" placeholder = {"Username"} value = {this.state.username} onChangeText={text => this.handleFormChange('username', text)} />
                 <TextInput autoCapitalize="none" placeholder = {"Email"} value = {this.state.email} onChangeText={text => this.handleFormChange('email', text)} />
                 <TextInput autoCapitalize="none" placeholder = {"Password"} value = {this.state.password} onChangeText={text => this.handleFormChange('password', text)} secureTextEntry={true}/>
                 <TextInput autoCapitalize="none" placeholder = {"Confirm Password"} value = {this.state.confirmPassword} onChangeText={text => this.handleFormChange('confirmPassword', text)} secureTextEntry={true} />
@@ -72,7 +77,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        signup: (name, email, password, confirmPassword) => dispatch(signup(name, email, password, confirmPassword))
+        signup: (name, username, email, password, confirmPassword) => dispatch(signup(name, username, email, password, confirmPassword))
     }
 }
 

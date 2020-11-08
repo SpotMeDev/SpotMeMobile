@@ -1,7 +1,6 @@
 import React, {Component} from 'react'; 
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'; 
 import { connect } from 'react-redux';
-import SInfo from 'react-native-sensitive-info';
 
 class Home extends Component {
     render(){
