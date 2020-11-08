@@ -2,6 +2,8 @@ import React from 'react'
 import {View, Text, StyleSheet, Modal, TextInput, TouchableOpacity} from 'react-native'
 import {connect} from 'react-redux'
 import {updateAccount, logout, changePassword} from '../actions/actions'
+import errorHandler from '../utils/errors'; 
+
 
 class UserProfile extends React.Component {
     constructor(props) {
@@ -21,20 +23,20 @@ class UserProfile extends React.Component {
     handleModalSubmit = (type) => {
         if (type == "name") {
             this.props.updateAccount(type, this.state.newName).then(() => {
-                console.log("Successfully updated name"); 
+                errorHandler("Successfully updated name", 'green');      
                 this.setState({nameChangeModal: false})
             }).catch(err => {
                 console.log(err); 
                 console.log("Unable to update name"); 
+                errorHandler(err.response.data.message, 'red');     
             })
         }
         else if (type == "username") {
             this.props.updateAccount(type, this.state.newUsername).then(() => {
-                console.log("Successfully updated username"); 
+                errorHandler("Successfully updated username", 'green');      
                 this.setState({usernameChangeModal: false})
             }).catch(err => {
-                console.log(err); 
-                console.log("Unable to update username")
+                errorHandler(err.response.data.message, 'red');     
             })
         }
         else {
@@ -42,10 +44,10 @@ class UserProfile extends React.Component {
 
             // TODO: Add form validation, FORMIK / YUP ? 
             this.props.changePassword(this.state.currentPassword, this.state.newPassword, this.state.confirmPassword).then(() => {
+                errorHandler("Successfully updated password", 'green');      
                 this.setState({changePasswordModal: false})
             }).catch(err => {
-                console.log(err); 
-                console.log("Unable to update password")
+                errorHandler(err.response.data.message, 'red');     
             })
         }
     }

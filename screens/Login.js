@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'; 
 import { connect } from 'react-redux';
 import { login } from "../actions/actions";
+import errorHandler from '../utils/errors'; 
 
 
 
@@ -24,9 +25,10 @@ class Login extends Component {
 
     login = () => {
         this.props.login(this.state.email, this.state.password).then(() => {
-            this.props.navigation.navigate("Dashboard"); 
+            errorHandler("Succesfully logged in", 'green');      
         }).catch(err => {
-            console.log(err);   
+            console.log(err);
+            errorHandler(err.response.data.message, 'red');     
         })
     }
 

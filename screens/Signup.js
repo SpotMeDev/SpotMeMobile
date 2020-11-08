@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'; 
 import { connect } from "react-redux";
 import { signup } from "../actions/actions";
+import errorHandler from '../utils/errors'; 
 
 
 class Signup extends Component {
@@ -31,9 +32,10 @@ class Signup extends Component {
 
     signupUser = () => {
         this.props.signup(this.state.name, this.state.email, this.state.password, this.state.confirmPassword).then(() => {
-            // this.props.navigation.navigate("Dashboard");   
+            errorHandler("Succesfully signed up", 'green');  
         }).catch(error => {
-            console.log("Error signing up", error); 
+            console.log("Error signing up", error.response.data.message);
+            errorHandler(error.response.data.message, 'red');  
         })
     }
 
