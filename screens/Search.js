@@ -34,7 +34,7 @@ class Search extends React.Component {
             <View>
                 <Text>Search for users here</Text>
                 <TextInput style = {styles.input} onChangeText = {text => this.handleInputChange(text)} value={this.state.searchQuery} placeholder = {"Search for user by username"} />
-                <FlatList data={this.state.users} renderItem ={({item}) => (<UserCard navigate = {this.props.navigation} name = {item.name} username = {item.username} id = {item._id} />)} keyExtractor ={item => item._id} />
+                <FlatList data={this.state.users} renderItem ={({item}) => (<UserCard click = {() => this.props.navigation.navigate("Profile", {name: item.name, username: item.username, id: item._id})} navigate = {this.props.navigation} name = {item.name} username = {item.username} id = {item._id} />)} keyExtractor ={item => item._id} />
             </View>
         )
     }

@@ -289,3 +289,54 @@ export const changePassword = (currentPasword, newPassword, confirmPassword) => 
         }
     })
 }; 
+
+
+export const allFriends = (id) => dispatch => {
+    return new Promise((resolve, reject) => {
+        if (id) {
+            axios.get(SERVER + `/auth/all-friends?id=${id}`).then(resp => {
+                resolve(resp.data.friends); 
+            }).catch(err => {
+                reject(err); 
+            })
+        }
+        else {
+            reject("Unable to query all user's friends")
+        }
+    })
+}
+
+ 
+export const sendTransaction = (recipientID, amount, message) => dispatch => {
+    return new Promise(async (resolve, reject) => {
+        if (message == "") {
+            reject("Message string must not be empty"); 
+        }
+        if (amount <= 0) {
+            reject("Amount must be more than 0"); 
+        }
+        try {
+            const jwt = await SInfo.getItem('token', {
+                sharedPreferencesName: 'mySharedPrefs',
+                keychainService: 'myKeychain'
+            });
+            if (jwt) {
+                axios.post(SERVER + "/transaction/send", {amount, message, recipientID}, {headers: {"Authorization": jwt}}).then(res => {
+                    dispatch({type: UPDATE, data: res.data.user})
+                    resolve("Succesfully sent transaction"); 
+                }).catch(err => {
+                    console.log(err); 
+                    reject(err); 
+                })
+            }
+            else {
+                // JWT doesn't exist, log user out
+                dispatch({type: LOGOUT});
+            }
+
+        }   
+        catch (err) {
+            reject(err); 
+        }
+    })
+}

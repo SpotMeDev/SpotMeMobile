@@ -9,6 +9,7 @@ import Signup from './screens/Signup';
 import Login from './screens/Login';
 import Profile from './screens/Profile'
 import SignedInNav from './screens/SignedInNav'; 
+import ViewTransaction from './screens/ViewTransaction'; 
 
 // initializes Stack Navigator to allow us to move between different screens
 const Stack = createStackNavigator(); 
@@ -30,6 +31,7 @@ class App extends Component {
             <>
             <Stack.Screen name = "SignedInNav" component = {SignedInNav} />
             <Stack.Screen name = "Profile" component = {Profile} />
+            <Stack.Screen name = "ViewTransaction" component = {ViewTransaction} /> 
           </>
           )}
         </Stack.Navigator>
