@@ -340,3 +340,40 @@ export const sendTransaction = (recipientID, amount, message) => dispatch => {
         }
     })
 }
+
+
+export const updateBalance = (amount) => dispatch => {
+    return new Promise (async (resolve, reject) => {
+        if (amount <= 0) {
+            reject("Balance update must be greater than 0"); 
+        }
+        try {
+            const jwt = await SInfo.getItem('token', {
+                sharedPreferencesName: 'mySharedPrefs',
+                keychainService: 'myKeychain'
+            });
+            if (jwt) {
+                axios.post(SERVER + "/transaction/add-balance", {amount}, {headers: {"Authorization": jwt}}).then(res => {
+                    dispatch({type: UPDATE, data: res.data.user})
+                    resolve("Succesfully updated balance"); 
+                }).catch(err => {
+                    console.log(err); 
+                    reject(err); 
+                })
+            }
+            else {
+                // JWT doesn't exist, log user out
+                dispatch({type: LOGOUT});
+            }
+
+        }
+        catch (err) {
+            reject(err); 
+        }
+    })
+}
+
+
+
+
+
