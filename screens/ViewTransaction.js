@@ -24,7 +24,7 @@ class ViewTransaction extends React.Component {
             const val = Number(this.state.value); 
             Keyboard.dismiss()
             this.props.send(this.id, val, this.state.message).then(res => {
-                errorHandler("Succesfully completed transaction"); 
+                errorHandler("Succesfully completed transaction", "green"); 
                 this.props.navigation.navigate("SignedInNav"); 
             }).catch(err => {
                 errorHandler(err.response.data.message, 'red')
