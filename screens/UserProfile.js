@@ -1,14 +1,16 @@
 import React from 'react'
-import {View, Text, StyleSheet, Modal, TextInput, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Image} from 'react-native'
 import {connect} from 'react-redux'
-import {updateAccount, logout, changePassword, updateBalance} from '../actions/actions'
+import {updateAccount, logout, changePassword, updateBalance, updateProfilePic} from '../actions/actions'
 import errorHandler from '../utils/errors'; 
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 
 class UserProfile extends React.Component {
     constructor(props) {
         super(props); 
         this.state = {
+            profilePicModal: false, 
             nameChangeModal: false, 
             usernameChangeModal: false, 
             changePasswordModal: false, 
@@ -18,7 +20,10 @@ class UserProfile extends React.Component {
             currentPassword: "", 
             newPassword: "", 
             confirmPassword: "", 
-            balanceIncrease: ""
+            balanceIncrease: "", 
+            fileData: "", 
+            filePath: "", 
+            fileUri: ""
         }
     }
 
@@ -65,6 +70,81 @@ class UserProfile extends React.Component {
         }
     }
 
+    takePicture = () => {
+        let options = {
+            storageOptions: {
+              skipBackup: true,
+              path: 'images',
+            },
+          };
+        launchCamera(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+              } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+              } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+                alert(response.customButton);
+              } else {
+                const source = { uri: response.uri };
+                console.log('response', JSON.stringify(response));
+                this.setState({
+                  filePath: response,
+                  fileData: response.data,
+                  fileUri: response.uri
+                });
+              }
+        
+        })
+    }
+
+    choosePicture = () => {
+        let options = {   
+            includeBase64: true        
+        };
+          launchImageLibrary(options, (response) => {
+      
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            } else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+              console.log('User tapped custom button: ', response.customButton);
+              alert(response.customButton);
+            } else {
+              const source = { uri: response.uri };
+              this.setState({
+                filePath: response,
+                fileData: response.base64,
+                fileUri: response.uri
+              });
+              this.props.updateProfilePic(response.base64).then(res => {
+                this.setState({profilePicModal: false})
+              }).catch(err => {
+                console.log(err); 
+              })
+            }
+          });
+    }
+
+    renderFileData() {
+        if (this.state.fileData) {
+          return <Image source={{ uri: 'data:image/jpeg;base64,' + this.state.fileData }} style={{width: 400, height: 400}}
+
+          />
+        } 
+      }
+    
+      renderFileUri() {
+        if (this.state.fileUri) {
+          return <Image
+            source={{ uri: this.state.fileUri }}
+            style={{width: 400, height: 400}}
+          />
+        }
+      }
+
+
 
     render(){
         return(
@@ -74,8 +154,13 @@ class UserProfile extends React.Component {
                     <Text>{this.props.username}</Text>
                     <Text>{this.props.email}</Text>
                     <Text>{this.props.balance}</Text>  
+                    <Image source={{ uri: 'data:image/jpeg;base64,' + this.props.img }} style={{width: 100, height: 100}} /> 
                 </View>
+
                 <View>
+                    <TouchableOpacity onPress = {() => this.setState({profilePicModal: true})}>
+                        <Text>Update profile picture</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress = {() => this.setState({nameChangeModal: true})}>
                         <Text>Edit Name</Text>
                     </TouchableOpacity>
@@ -93,6 +178,19 @@ class UserProfile extends React.Component {
                     </TouchableOpacity>
                 </View>
 
+
+                {/* modal responsible for name change fields */}
+                <Modal visible = {this.state.profilePicModal} animationType = {"fade"} transparent = {false}>
+                    <View style = {styles.profilePicModal}>
+                        <Text>Update your profile picture!</Text>
+                        <TouchableOpacity onPress = {() => this.takePicture()}>
+                            <Text>Take a Picture</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => this.choosePicture()}>
+                            <Text>Choose from an exiting picture in gallery</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
 
                 {/* modal responsible for name change fields */}
                 <Modal visible = {this.state.nameChangeModal} animationType = {"fade"} transparent = {false}>
@@ -157,6 +255,9 @@ const styles = StyleSheet.create({
     }, 
     increaseBalanceModal: {
         marginTop: 100
+    }, 
+    profilePicModal: {
+        marginTop: 100
     }
 })
 
@@ -166,7 +267,8 @@ const mapStateToProps = state => {
         name: state.user.user.name, 
         username: state.user.user.username, 
         email: state.user.user.email, 
-        balance: state.user.user.balance
+        balance: state.user.user.balance, 
+        img: state.user.user.img
     }
 }
 
@@ -174,6 +276,7 @@ const mapDispatchToProps = dispatch => {
     return {
         updateAccount: (type, update) => dispatch(updateAccount(type, update)), 
         updateBalance: (amount) => dispatch(updateBalance(amount)), 
+        updateProfilePic: (data) => dispatch(updateProfilePic(data)), 
         logout: () => dispatch(logout()), 
         changePassword: (currentPassword, newPassword, confirmPassword) => dispatch(changePassword(currentPassword, newPassword, confirmPassword))
     }

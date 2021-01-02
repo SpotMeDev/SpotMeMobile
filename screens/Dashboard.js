@@ -7,7 +7,6 @@ class Dashboard extends Component {
         return (
             <View style = {styles.container}>
                 <Text>Welcome to the SpotMe Dashboard!</Text>
-            
             </View>
         )
     }
