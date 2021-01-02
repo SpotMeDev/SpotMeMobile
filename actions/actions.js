@@ -2,7 +2,6 @@ import {SIGNUP, LOGIN, LOGOUT, UPDATE } from './types.js'
 import axios from 'axios'; 
 import {SERVER} from '../utils/consts'; 
 import {saveJWT, deleteJWT, getJWT} from '../utils/authentication'
-import {arrayBufferToBase64} from '../utils/misc' 
 
 
 // add the necessary actions here 
@@ -79,7 +78,6 @@ export const search = (query) => dispatch => {
             
             }}).then(res => {
                 // return users after search query 
-                console.log(res.data.users)
                 resolve(res.data.users); 
             }).catch(err => {
                 console.log('error here', err)
@@ -191,7 +189,6 @@ export const updateAccount = (type, updatedField) => dispatch => {
         const jwt = await getJWT()
         if (jwt) {
             axios.post(SERVER + "/auth/change-account", {updateType: type, updatedField: updatedField}, {headers: {"Authorization": jwt}}).then(response => {
-                console.log(response.data.user)
                 dispatch({type: UPDATE, data: response.data.user});
                 resolve(); 
             }).catch(err => {
