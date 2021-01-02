@@ -306,8 +306,8 @@ export const updateProfilePic = (data) => dispatch => {
         const jwt = await getJWT(); 
         if (jwt) {
             axios.post(SERVER + "/auth/update-profile-pic", {profileData64: data}, {headers: {"Authorization": jwt}}).then(res => {
-                const base64 = arrayBufferToBase64(res.data.user.img.data.data)
-                res.data.user.img = base64; 
+                // const base64 = arrayBufferToBase64(res.data.user.img.data.data)
+                // res.data.user.img = base64; 
                 dispatch({type: UPDATE, data: res.data.user})
                 resolve("Successfully updated profile picture"); 
             }).catch(err=> {
