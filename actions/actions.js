@@ -336,3 +336,20 @@ export const retrieveUserTransactions = () => dispatch => {
     })
 }
 
+export const retrieveAllTransactions = () => dispatch => {
+    return new Promise(async (resolve, reject) => {
+        const jwt = await getJWT(); 
+        if (jwt) {
+            axios.get(SERVER + "/transaction/all-transactions", {headers: {"Authorization": jwt}}).then(res => {
+                resolve(res.data.transactions); 
+            }).catch(err => {
+                reject(err); 
+            })
+        }
+        else {
+            // JWT doesn't exist, log user out
+            dispatch({type: LOGOUT});
+        }
+    })
+}
+

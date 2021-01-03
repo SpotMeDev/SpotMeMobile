@@ -8,10 +8,10 @@ class TransactionCard extends Component {
     }
 
     render(){
-        const {sender, recipient, amount, message} = this.props; 
+        const {sender, recipient, amount, message, createdAt} = this.props; 
         return (
             <View style = {styles.container}>
-                <Text>{sender.name} paid {recipient.name} $ {amount}</Text>
+                <Text>{sender.name} paid {recipient.name} $ {amount}  on {createdAt}</Text>
                 <Text>{message}</Text>
             </View>
         )

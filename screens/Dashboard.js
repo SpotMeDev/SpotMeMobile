@@ -1,55 +1,24 @@
 import React, {Component} from 'react'; 
-import {View, Text, StyleSheet, FlatList} from 'react-native'; 
-import { connect } from 'react-redux';
-import {retrieveUserTransactions} from '../actions/actions'
-import TransactionCard from '../components/TransactionCard'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import UserTransactions from '../screens/UserTransactions'
+import AllTransactions from '../screens/AllTransactions'
 
-
+const Tab = createMaterialTopTabNavigator();
 
 class Dashboard extends Component {
     constructor(props) {
         super(props) 
-        this.state = {
-            transactions: []
-        }
     }
 
-    componentDidMount() {
-        this.props.getTransactions().then(transactions => {
-            this.setState({transactions: transactions})
-        }).catch(err => {
-
-        })
-    }
     render(){
         return (
-            <View>
-                <Text>Welcome to the SpotMe Dashboard!</Text>
-                <FlatList data={this.state.transactions} renderItem ={({item}) => (<TransactionCard sender = {item.sender} recipient = {item.recipient} amount = {item.amount} message = {item.message} />)} keyExtractor ={item => item.id} />
-            </View>
+        <Tab.Navigator>
+            <Tab.Screen name="AllTransactions" component={AllTransactions} />
+            <Tab.Screen name="UserTransactions" component={UserTransactions} />
+        </Tab.Navigator>
         )
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1, 
-        justifyContent: 'center', 
-        alignItems: 'center'
-    }
-}); 
 
-const mapStateToProps = state => {
-    return {
-        user: state.user.user
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        getTransactions: () => dispatch(retrieveUserTransactions())
-    }
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
+export default Dashboard
