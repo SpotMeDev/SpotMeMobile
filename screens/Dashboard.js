@@ -16,7 +16,6 @@ class Dashboard extends Component {
 
     componentDidMount() {
         this.props.getTransactions().then(transactions => {
-            console.log(transactions)
             this.setState({transactions: transactions})
         }).catch(err => {
 

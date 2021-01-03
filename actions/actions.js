@@ -324,7 +324,6 @@ export const retrieveUserTransactions = () => dispatch => {
         const jwt = await getJWT(); 
         if (jwt) {
             axios.get(SERVER + "/transaction/user-transactions", {headers: {"Authorization": jwt}}).then(res => {
-                console.log(res.data.transactions)
                 resolve(res.data.transactions); 
             }).catch(err=> {
                 reject(err); 
