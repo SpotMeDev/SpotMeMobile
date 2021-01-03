@@ -319,3 +319,21 @@ export const updateProfilePic = (data) => dispatch => {
 }
 
 
+export const retrieveUserTransactions = () => dispatch => {
+    return new Promise(async (resolve, reject) => {
+        const jwt = await getJWT(); 
+        if (jwt) {
+            axios.get(SERVER + "/transaction/user-transactions", {headers: {"Authorization": jwt}}).then(res => {
+                console.log(res.data.transactions)
+                resolve(res.data.transactions); 
+            }).catch(err=> {
+                reject(err); 
+            })
+        }
+        else {
+            // JWT doesn't exist, log user out
+            dispatch({type: LOGOUT});
+        }
+    })
+}
+

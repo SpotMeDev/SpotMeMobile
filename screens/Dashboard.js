@@ -1,12 +1,32 @@
 import React, {Component} from 'react'; 
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'; 
+import {View, Text, StyleSheet, FlatList} from 'react-native'; 
 import { connect } from 'react-redux';
+import {retrieveUserTransactions} from '../actions/actions'
+import TransactionCard from '../components/TransactionCard'
+
+
 
 class Dashboard extends Component {
+    constructor(props) {
+        super(props) 
+        this.state = {
+            transactions: []
+        }
+    }
+
+    componentDidMount() {
+        this.props.getTransactions().then(transactions => {
+            console.log(transactions)
+            this.setState({transactions: transactions})
+        }).catch(err => {
+
+        })
+    }
     render(){
         return (
-            <View style = {styles.container}>
+            <View>
                 <Text>Welcome to the SpotMe Dashboard!</Text>
+                <FlatList data={this.state.transactions} renderItem ={({item}) => (<TransactionCard sender = {item.sender} recipient = {item.recipient} amount = {item.amount} message = {item.message} />)} keyExtractor ={item => item.id} />
             </View>
         )
     }
@@ -26,6 +46,11 @@ const mapStateToProps = state => {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+        getTransactions: () => dispatch(retrieveUserTransactions())
+    }
+}
 
 
-export default connect(mapStateToProps, null)(Dashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
