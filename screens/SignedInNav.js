@@ -39,7 +39,7 @@ class SignedInNav extends React.Component {
                   return <Ionicons name= {iconName} size = {size} />;
                 },
               })}>
-                <Tab.Screen name = {"Dashboard"} component = {Dashboard} />
+                <Tab.Screen name = {"Dashboard"} component = {Dashboard}/>
                 <Tab.Screen name = {"Transaction"} component = {CreateTransaction} /> 
                 <Tab.Screen name = {"Search"} component = {Search}></Tab.Screen>
                 <Tab.Screen name = {"User"} component = {UserProfile}></Tab.Screen>

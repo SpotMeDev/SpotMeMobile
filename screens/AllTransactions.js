@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, FlatList} from 'react-native' 
+import {View, Text, FlatList, StyleSheet} from 'react-native' 
 import {connect} from 'react-redux'
 import {retrieveAllTransactions} from '../actions/actions'
 import TransactionCard from '../components/TransactionCard'
@@ -30,6 +30,8 @@ class AllTransactions extends Component {
         )
     }
 }
+
+
 
 const mapStateToProps = state => {
     return {}

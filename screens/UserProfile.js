@@ -189,6 +189,9 @@ class UserProfile extends React.Component {
                         <TouchableOpacity onPress = {() => this.choosePicture()}>
                             <Text>Choose from an exiting picture in gallery</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => this.setState({profilePicModal: false})}>
+                            <Text>Cancel</Text>
+                        </TouchableOpacity>
                     </View>
                 </Modal>
 
@@ -200,6 +203,9 @@ class UserProfile extends React.Component {
                         <TouchableOpacity onPress = {() => this.handleModalSubmit("name")}>
                             <Text>Change</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => this.setState({nameChangeModal: false})}>
+                            <Text>Cancel</Text>
+                        </TouchableOpacity>
                     </View>
                 </Modal>
 
@@ -210,6 +216,9 @@ class UserProfile extends React.Component {
                         <TextInput autoCapitalize="none" placeholder = {"New Username"} value = {this.state.username} onChangeText={text => this.setState({newUsername:text})} />
                         <TouchableOpacity onPress = {() => this.handleModalSubmit("username")}>
                             <Text>Change</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => this.setState({usernameChangeModal: false})}>
+                            <Text>Cancel</Text>
                         </TouchableOpacity>
                     </View>
                 </Modal>
@@ -224,6 +233,9 @@ class UserProfile extends React.Component {
                         <TouchableOpacity onPress = {() => this.handleModalSubmit("password")}>
                             <Text>Change Password</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => this.setState({changePasswordModal: false})}>
+                            <Text>Cancel</Text>
+                        </TouchableOpacity>
                     </View>
                 </Modal>
 
@@ -234,6 +246,9 @@ class UserProfile extends React.Component {
                         <TextInput placeholder = {"0"} keyboardType={'numeric'} value = {this.state.balanceIncrease} onChangeText = {text => {this.setState({balanceIncrease: text})}}/>
                         <TouchableOpacity onPress = {() => this.handleModalSubmit("balance")}>
                             <Text>Update Balance</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => this.setState({increaseBalanceModal: false})}>
+                            <Text>Cancel</Text>
                         </TouchableOpacity>
                     </View>
                 </Modal>

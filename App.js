@@ -29,7 +29,7 @@ class App extends Component {
           </>
           ) : ( 
             <>
-            <Stack.Screen name = "SignedInNav" component = {SignedInNav} />
+            <Stack.Screen name = "SignedInNav" component = {SignedInNav}/>
             <Stack.Screen name = "Profile" component = {Profile} />
             <Stack.Screen name = "ViewTransaction" component = {ViewTransaction} /> 
           </>
